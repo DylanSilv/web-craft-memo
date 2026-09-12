@@ -37,11 +37,27 @@ function Index() {
     const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-slide]"));
     const observer = new IntersectionObserver((entries) => {
       const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (visible) setActiveSlide(Number((visible.target as HTMLElement).dataset.slide));
+      if (visible) setActiveSlide(Number((visible.target as HTMLElement).dataset["slide"]));
     }, { threshold: [0.3, 0.6] });
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
+      if (event.key === "ArrowDown" || event.key === "PageDown") {
+        event.preventDefault();
+        jump(Math.min(activeSlide + 1, slides.length - 1));
+      }
+      if (event.key === "ArrowUp" || event.key === "PageUp") {
+        event.preventDefault();
+        jump(Math.max(activeSlide - 1, 0));
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [activeSlide]);
 
   const scrollCarousel = useCallback((ref: React.RefObject<HTMLDivElement | null>, direction: number, current: number, count: number, setter: (value: number) => void) => {
     const next = (current + direction + count) % count;
@@ -140,7 +156,7 @@ function Index() {
 }
 
 function Slide({ id, className = "", children }: { id: number; className?: string; children: React.ReactNode }) {
-  return <section id={`slide-${id}`} data-slide={id - 1} className={`slide ${className}`}>{children}</section>;
+  return <section id={`slide-${id}`} data-slide={id - 1} aria-label={`${String(id).padStart(2, "0")} de 10: ${slides[id - 1]}`} className={`slide ${className}`}>{children}</section>;
 }
 function SlideHead({ number, label }: { number: string; label: string }) { return <header className="slide-head"><span>{number}</span><span>{label}</span><span>DYLAN WEBS</span></header>; }
 function CarouselControls({ current, total, previous, next }: { current: number; total: number; previous: () => void; next: () => void }) { return <div className="carousel-controls"><div className="progress"><span style={{ width: `${((current + 1) / total) * 100}%` }} /></div><span>{String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span><Button onClick={previous} aria-label="Anterior"><ArrowLeft /></Button><Button onClick={next} aria-label="Siguiente"><ArrowRight /></Button></div>; }
