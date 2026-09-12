@@ -85,7 +85,7 @@ function Index() {
         <div className="hero-index">01</div>
       </Slide>
 
-      <Slide id={2}>
+      <Slide id={2} className="ink-slide">
         <SlideHead number="02 / 10" label="EL PROBLEMA" />
         <div className="problem-layout">
           <h2>Tus clientes ya te encontraron.<br /><em>Ahora tienen que entender qué hacer.</em></h2>
