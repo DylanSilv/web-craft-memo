@@ -139,7 +139,7 @@ function Index() {
         <div className="difference-grid">{[["Foco", "Trabajo específicamente con webs."], ["Contexto local", "Entiendo cómo consultan y compran los negocios uruguayos."], ["Diseño + desarrollo", "No entrego solamente un archivo. Lo construyo."], ["Pensamiento comercial", "Primero pregunto qué queremos que haga la persona."], ["Contacto directo", "El cliente habla conmigo, no con cinco departamentos."]].map(([title, copy], index) => <article key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div>
       </Slide>
 
-      <Slide id={9} className="status-slide">
+      <Slide id={9} className="status-slide ink-slide">
         <SlideHead number="09 / 10" label="TRANSPARENCIA" />
         <div className="status-copy"><p>Etapa inicial,<br />criterio claro.</p><h2>No necesito inventar<br />tracción para demostrar<br /><em>cómo pienso.</em></h2></div>
         <div className="status-columns"><article><span>YA EXISTE</span><ul><li>Capacidad técnica</li><li>Portfolio y proyectos</li><li>Auditorías y conocimiento</li><li>Un proceso definido</li></ul></article><article><span>FALTA VALIDAR</span><ul><li>Adquisición consistente</li><li>Pricing</li><li>Conversiones</li><li>Casos pagos y testimonios</li></ul></article></div>
