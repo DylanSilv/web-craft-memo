@@ -95,7 +95,7 @@ function Index() {
         </div>
       </Slide>
 
-      <Slide id={3} className="audit-slide">
+      <Slide id={3} className="audit-slide ink-slide">
         <SlideHead number="03 / 10" label="MUESTRA EXPLORATORIA" />
         <div className="audit-intro"><div><strong>6/6</strong><span>presentaron al menos una fricción digital que una web podría reducir.</span></div><p>Patrones observados en una revisión pública y acotada. No es un estudio estadístico del mercado.</p></div>
         <div className="carousel" ref={auditRef} onScroll={(e) => setAuditIndex(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))} tabIndex={0} aria-label="Auditorías de negocios locales">
