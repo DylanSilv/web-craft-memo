@@ -26,12 +26,110 @@ const audits = [
   ["Prime Burgers", "Gastronomía", "El recorrido salta de Instagram a menú externo y luego a otra plataforma."],
 ];
 
+
+function useCarousel(count: number) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
+
+  /** Índice = hijo cuyo offsetLeft está más cerca del scroll actual.
+   *  No sirve dividir por el ancho del contenedor: las tarjetas de auditoría
+   *  miden min(74vw, 950px) y el contenedor mide el ancho completo de la slide. */
+  const nearest = (el: HTMLDivElement) => {
+    let best = 0;
+    let dist = Infinity;
+    Array.from(el.children).forEach((child, i) => {
+      const d = Math.abs((child as HTMLElement).offsetLeft - el.scrollLeft);
+      if (d < dist) { dist = d; best = i; }
+    });
+    return best;
+  };
+
+  const goTo = useCallback((i: number) => {
+    const el = ref.current;
+    if (!el) return;
+    const target = Math.max(0, Math.min(i, el.children.length - 1));
+    const child = el.children[target] as HTMLElement | undefined;
+    if (!child) return;
+    // scrollTo sobre el contenedor, no scrollIntoView: este último arrastra
+    // también el scroll vertical de la página y saca la slide de cuadro.
+    el.scrollTo({ left: child.offsetLeft, behavior: "smooth" });
+    setIndex(target);
+  }, []);
+
+  const syncIndex = useCallback(() => {
+    const el = ref.current;
+    if (el) setIndex(nearest(el));
+  }, []);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let dragging = false, startX = 0, startLeft = 0, moved = false;
+
+    const down = (e: PointerEvent) => {
+      if (e.pointerType === "touch" || e.button !== 0) return; // el táctil ya lo resuelve el navegador
+      dragging = true; moved = false;
+      startX = e.clientX; startLeft = el.scrollLeft;
+      el.style.scrollSnapType = "none";
+      el.classList.add("is-dragging");
+      el.setPointerCapture(e.pointerId);
+    };
+    const move = (e: PointerEvent) => {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      el.scrollLeft = startLeft - dx;
+    };
+    const up = (e: PointerEvent) => {
+      if (!dragging) return;
+      dragging = false;
+      el.classList.remove("is-dragging");
+      el.style.scrollSnapType = "";
+      if (el.hasPointerCapture(e.pointerId)) el.releasePointerCapture(e.pointerId);
+      const best = nearest(el);
+      const child = el.children[best] as HTMLElement | undefined;
+      if (child) el.scrollTo({ left: child.offsetLeft, behavior: "smooth" });
+      setIndex(best);
+    };
+    // Evita que soltar el arrastre dispare el click del elemento de abajo.
+    const swallowClick = (e: MouseEvent) => {
+      if (!moved) return;
+      e.preventDefault(); e.stopPropagation(); moved = false;
+    };
+
+    el.addEventListener("pointerdown", down);
+    el.addEventListener("pointermove", move);
+    el.addEventListener("pointerup", up);
+    el.addEventListener("pointercancel", up);
+    el.addEventListener("click", swallowClick, true);
+    return () => {
+      el.removeEventListener("pointerdown", down);
+      el.removeEventListener("pointermove", move);
+      el.removeEventListener("pointerup", up);
+      el.removeEventListener("pointercancel", up);
+      el.removeEventListener("click", swallowClick, true);
+    };
+  }, []);
+
+  /** Teclado propio del carrusel. stopPropagation para no pelearse con la
+   *  navegación de slides, que escucha en window. */
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    const map: Record<string, number | undefined> = {
+      ArrowRight: index + 1, ArrowLeft: index - 1, Home: 0, End: count - 1,
+    };
+    const target = map[e.key];
+    if (target === undefined) return;
+    e.preventDefault(); e.stopPropagation();
+    goTo(target);
+  };
+
+  return { ref, index, goTo, syncIndex, onKeyDown };
+}
+
 function Index() {
   const [activeSlide, setActiveSlide] = useState(0);
-  const [auditIndex, setAuditIndex] = useState(0);
-  const [projectIndex, setProjectIndex] = useState(0);
-  const auditRef = useRef<HTMLDivElement>(null);
-  const portfolioRef = useRef<HTMLDivElement>(null);
+  const audit = useCarousel(audits.length);
+  const portfolio = useCarousel(3);
 
   useEffect(() => {
     const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-slide]"));
@@ -58,12 +156,6 @@ function Index() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [activeSlide]);
-
-  const scrollCarousel = useCallback((ref: React.RefObject<HTMLDivElement | null>, direction: number, current: number, count: number, setter: (value: number) => void) => {
-    const next = (current + direction + count) % count;
-    ref.current?.children[next]?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
-    setter(next);
-  }, []);
 
   const jump = (index: number) => document.getElementById(`slide-${index + 1}`)?.scrollIntoView({ behavior: "smooth" });
 
@@ -98,10 +190,10 @@ function Index() {
       <Slide id={3} className="audit-slide ink-slide">
         <SlideHead number="03 / 10" label="MUESTRA EXPLORATORIA" />
         <div className="audit-intro"><div><strong>6/6</strong><span>presentaron al menos una fricción digital que una web podría reducir.</span></div><p>Patrones observados en una revisión pública y acotada. No es un estudio estadístico del mercado.</p></div>
-        <div className="carousel" ref={auditRef} onScroll={(e) => setAuditIndex(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))} tabIndex={0} aria-label="Auditorías de negocios locales">
+        <div className="carousel" ref={audit.ref} onScroll={audit.syncIndex} onKeyDown={audit.onKeyDown} tabIndex={0} role="group" aria-roledescription="carrusel" aria-label="Auditorías de negocios locales">
           {audits.map(([name, category, issue], index) => <article className="audit-card" key={name}><div className="card-number">{String(index + 1).padStart(2, "0")}</div><div><p className="kicker">{category}</p><h3>{name}</h3></div><p className="audit-copy">{issue}</p><span className="card-mark">DW / AUDIT</span></article>)}
         </div>
-        <CarouselControls current={auditIndex} total={audits.length} previous={() => scrollCarousel(auditRef, -1, auditIndex, audits.length, setAuditIndex)} next={() => scrollCarousel(auditRef, 1, auditIndex, audits.length, setAuditIndex)} />
+        <CarouselControls current={audit.index} total={audits.length} previous={() => audit.goTo(audit.index - 1)} next={() => audit.goTo(audit.index + 1)} />
       </Slide>
 
       <Slide id={4} className="ink-slide service-slide">
@@ -125,12 +217,12 @@ function Index() {
 
       <Slide id={7} className="portfolio-slide ink-slide">
         <SlideHead number="07 / 10" label="PROYECTOS SELECCIONADOS" />
-        <div className="project-carousel" ref={portfolioRef} onScroll={(e) => setProjectIndex(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))} tabIndex={0} aria-label="Proyectos seleccionados">
+        <div className="project-carousel" ref={portfolio.ref} onScroll={portfolio.syncIndex} onKeyDown={portfolio.onKeyDown} tabIndex={0} role="group" aria-roledescription="carrusel" aria-label="Proyectos seleccionados">
           <ProjectFintrack />
           <ProjectRescoldo />
           <ProjectManso />
         </div>
-        <CarouselControls current={projectIndex} total={3} previous={() => scrollCarousel(portfolioRef, -1, projectIndex, 3, setProjectIndex)} next={() => scrollCarousel(portfolioRef, 1, projectIndex, 3, setProjectIndex)} />
+        <CarouselControls current={portfolio.index} total={3} previous={() => portfolio.goTo(portfolio.index - 1)} next={() => portfolio.goTo(portfolio.index + 1)} />
       </Slide>
 
       <Slide id={8}>
@@ -159,7 +251,7 @@ function Slide({ id, className = "", children }: { id: number; className?: strin
   return <section id={`slide-${id}`} data-slide={id - 1} aria-label={`${String(id).padStart(2, "0")} de 10: ${slides[id - 1]}`} className={`slide ${className}`}>{children}</section>;
 }
 function SlideHead({ number, label }: { number: string; label: string }) { return <header className="slide-head"><span>{number}</span><span>{label}</span><span>DYLAN WEBS</span></header>; }
-function CarouselControls({ current, total, previous, next }: { current: number; total: number; previous: () => void; next: () => void }) { return <div className="carousel-controls"><div className="progress"><span style={{ width: `${((current + 1) / total) * 100}%` }} /></div><span>{String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span><Button onClick={previous} aria-label="Anterior"><ArrowLeft /></Button><Button onClick={next} aria-label="Siguiente"><ArrowRight /></Button></div>; }
+function CarouselControls({ current, total, previous, next }: { current: number; total: number; previous: () => void; next: () => void }) { return <div className="carousel-controls"><div className="progress"><span style={{ width: `${((current + 1) / total) * 100}%` }} /></div><span>{String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span><Button onClick={previous} disabled={current === 0} aria-label="Anterior"><ArrowLeft /></Button><Button onClick={next} disabled={current === total - 1} aria-label="Siguiente"><ArrowRight /></Button></div>; }
 
 function ProjectFintrack() { return <article className="project fintrack is-lead"><div className="project-copy"><span>01 / PIEZA PRINCIPAL · PRODUCTO DIGITAL</span><h3>FINTRACK<em>/FinanceFlow</em></h3><p>Una aplicación personal para entender el dinero sin convertirlo en una planilla.</p><small>UI · ARQUITECTURA · DESARROLLO</small></div><div className="finance-mock"><div className="mock-head"><span>FinanceFlow</span><span>Overview · Transactions · Budgets</span><b>DW</b></div><div className="balance"><small>BALANCE TOTAL</small><strong>$ 284.350</strong><span>Datos demostrativos</span></div><div className="chart"><i/><i/><i/><i/><i/><i/><i/></div><div className="finance-stats"><div><small>INGRESOS</small><b>$ 96.200</b></div><div><small>GASTOS</small><b>$ 48.640</b></div><div><small>AHORRO</small><b>32%</b></div></div><div className="phone-mock"><span>Balance</span><strong>$284.350</strong><div className="phone-chart"/><small>Vista móvil · demo</small></div></div></article>; }
 function ProjectRescoldo() {
