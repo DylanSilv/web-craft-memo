@@ -187,15 +187,18 @@ button, a { cursor: pointer; }
 .rail-total { font-size: .6rem; }
 .slide-head, .meta-row { position: relative; z-index: 2; display: flex; justify-content: space-between; gap: 1rem; font: 400 .66rem/1 var(--font-mono); letter-spacing: 0; text-transform: uppercase; }
 .slide-head { padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+.slide-head span:nth-child(2), .meta-row span:nth-child(3) { color: var(--accent); }
 .hero-slide { display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 2rem; }
 .hero-center { position: relative; z-index: 2; }
 .kicker { font-size: .68rem; text-transform: uppercase; }
 .hero-center .kicker { color: var(--accent); margin-bottom: 1.5rem; }
 .hero-center h1 { max-width: 1400px; font-size: clamp(3.8rem, 8.5vw, 9.5rem); line-height: .83; font-weight: 600; text-transform: uppercase; }
 em { font-family: var(--font-serif); font-weight: 600; text-transform: none; }
-.hero-center h1 span { color: var(--accent); }
+.hero-center h1 span { color: var(--foreground); }
+.grad-word { font-weight: inherit; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero-foot { z-index: 2; display: flex; justify-content: space-between; align-items: end; font-size: .9rem; text-transform: uppercase; }
-.hero-index { position: absolute; right: -1vw; bottom: -8vw; font-size: 32vw; line-height: .8; font-weight: 700; color: color-mix(in oklab, var(--foreground) 5%, transparent); }
+.hero-index { position: absolute; right: -1vw; bottom: -8vw; font-size: 32vw; line-height: .8; font-weight: 700; color: var(--ink-700); }
+
 h2 { font-size: clamp(3rem, 6.5vw, 7rem); line-height: .92; font-weight: 600; }
 .problem-layout { position: relative; z-index: 2; padding-top: 8vh; }
 .problem-layout h2 { max-width: 1100px; }
