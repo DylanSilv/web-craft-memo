@@ -79,7 +79,7 @@ function Index() {
         <div className="meta-row"><span>DYLAN WEBS</span><span>MONTEVIDEO · URUGUAY</span><span>MEMO / 2026</span></div>
         <div className="hero-center">
           <p className="kicker">Atención ≠ acción</p>
-          <h1>Instagram consigue<br />la <em>atención.</em><br /><span>Tu web hace el resto.</span></h1>
+          <h1>Instagram consigue<br />la <em>atención.</em><br /><span>Tu web hace el <b className="grad-word">resto.</b></span></h1>
         </div>
         <div className="hero-foot"><p>Diseño y desarrollo web<br />para negocios locales.</p><Button variant="accent" onClick={() => jump(1)} aria-label="Continuar"><ArrowDown /></Button></div>
         <div className="hero-index">01</div>
