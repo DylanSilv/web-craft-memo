@@ -117,7 +117,7 @@ function Index() {
         <div className="fit-columns"><article><h3>Sí, cuando</h3><ul><li>El negocio está activo y ya recibe consultas.</li><li>Los productos o servicios están claros.</li><li>Instagram tiene movimiento.</li><li>Quieren dejar de responder siempre lo mismo.</li></ul></article><article><h3>No todavía, cuando</h3><ul><li>El negocio aún no sabe qué vende.</li><li>La única prioridad es “algo barato”.</li><li>Esperan que una web genere clientes sola.</li><li>Primero necesitan campañas, no infraestructura web.</li></ul></article></div>
       </Slide>
 
-      <Slide id={6} className="process-slide">
+      <Slide id={6} className="process-slide ink-slide">
         <SlideHead number="06 / 10" label="PROCESO" />
         <div className="process-title"><h2>Simple de explicar.<br /><em>Riguroso al hacer.</em></h2><p>Una secuencia corta para no diseñar antes de entender.</p></div>
         <ol className="timeline">{[["Entender", "Qué vende el negocio y qué necesita hacer su cliente."], ["Ordenar", "Contenido, estructura, navegación y acción principal."], ["Diseñar", "La identidad visual aplicada a la experiencia."], ["Construir", "Desarrollo responsive, rendimiento e integraciones."], ["Publicar", "Dominio, medición, control de calidad y lanzamiento."]].map(([title, copy], index) => <li key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></li>)}</ol>
