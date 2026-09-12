@@ -172,15 +172,18 @@ html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
 button, a { cursor: pointer; }
 .slide { position: relative; min-height: 100svh; padding: 2rem 5vw 4rem 8vw; border-bottom: 1px solid var(--border); overflow: hidden; scroll-snap-align: start; }
 .slide::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .22; background-image: linear-gradient(to right, var(--border) 1px, transparent 1px); background-size: 25% 100%; }
-.ink-slide { --background: oklch(0.115 0.005 95); --foreground: oklch(0.965 0.004 95); --border: oklch(0.965 0.004 95 / 24%); background: var(--background); color: var(--foreground); }
-.rail { position: fixed; z-index: 50; inset: 0 auto 0 0; width: 3.5rem; border-right: 1px solid var(--border); background: color-mix(in oklab, var(--background) 92%, transparent); backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 1.2rem 0; }
+.ink-slide { --background: var(--ink-900); --foreground: #FFFFFF; --border: var(--line); --muted-foreground: var(--text-dim); --accent: var(--blue); background: var(--background); color: var(--foreground); }
+.rail { position: fixed; z-index: 50; inset: 0 auto 0 0; width: 3.5rem; border-right: 1px solid var(--line); background: var(--ink-900); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 1.2rem 0; }
 .rail-brand, .rail-total, .rail-links span, .slide-head, .kicker, small { font-family: var(--font-mono); }
 .rail-brand { font-weight: 700; writing-mode: vertical-rl; }
 .rail-links { display: flex; flex-direction: column; gap: .15rem; }
-.rail-links button { width: 3.4rem; height: 2rem; border: 0; background: transparent; font-size: .6rem; color: var(--muted-foreground); }
-.rail-links button::after { content: ""; display: block; width: 0; height: 2px; margin: .2rem auto 0; background: var(--accent); transition: width .2s; }
-.rail-links button.is-active { color: var(--foreground); }
+.rail-links button { width: 3.4rem; height: 2rem; border: 0; background: transparent; font-size: .6rem; color: var(--text-dim); }
+.rail-links button::after { content: ""; display: block; width: 0; height: 2px; margin: .2rem auto 0; background: var(--fuchsia); transition: width .2s; }
+.rail-links button:hover { color: var(--blue); }
+.rail-links button.is-active { color: var(--fuchsia); }
 .rail-links button.is-active::after { width: 1.4rem; }
+.rail-total, .rail-brand { color: var(--text-dim); }
+
 .rail-total { font-size: .6rem; }
 .slide-head, .meta-row { position: relative; z-index: 2; display: flex; justify-content: space-between; gap: 1rem; font: 400 .66rem/1 var(--font-mono); letter-spacing: 0; text-transform: uppercase; }
 .slide-head { padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
