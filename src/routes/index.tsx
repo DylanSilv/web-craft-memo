@@ -108,7 +108,7 @@ function Index() {
         <SlideHead number="04 / 10" label="LA OFERTA" />
         <div className="service-statement"><p>Una especialidad.</p><h2>Diseño y desarrollo<br />páginas web para<br /><em>negocios locales.</em></h2></div>
         <div className="anti-list"><span>No IA</span><span>No automatizaciones</span><span>No marketing mensual</span><span>No “soluciones 360”</span></div>
-        <div className="service-bottom"><p>Cada web se organiza alrededor de una acción concreta.</p><div className="action-marquee">RESERVAR · COMPRAR · CONSULTAR · VER MENÚ · PEDIR PRESUPUESTO · VISITAR</div><div className="service-groups"><div><small>BASE</small><span>Arquitectura, diseño responsive, desarrollo y performance.</span></div><div><small>NEGOCIO</small><span>Menú, catálogo, servicios, precios y formularios.</span></div><div><small>SALIDA</small><span>WhatsApp, Maps, reservas, dominio, analytics y SEO local.</span></div></div></div>
+        <div className="service-bottom"><p>Cada web se organiza alrededor de una acción concreta.</p><div className="action-marquee">{["RESERVAR", "COMPRAR", "CONSULTAR", "VER MENÚ", "PEDIR PRESUPUESTO", "VISITAR"].map((word, index) => <span key={word}>{index > 0 && <i className="sep"> · </i>}{word}</span>)}</div><div className="service-groups"><div><small>BASE</small><span>Arquitectura, diseño responsive, desarrollo y performance.</span></div><div><small>NEGOCIO</small><span>Menú, catálogo, servicios, precios y formularios.</span></div><div><small>SALIDA</small><span>WhatsApp, Maps, reservas, dominio, analytics y SEO local.</span></div></div></div>
       </Slide>
 
       <Slide id={5}>
