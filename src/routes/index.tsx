@@ -253,7 +253,24 @@ function Slide({ id, className = "", children }: { id: number; className?: strin
 function SlideHead({ number, label }: { number: string; label: string }) { return <header className="slide-head"><span>{number}</span><span>{label}</span><span>DYLAN WEBS</span></header>; }
 function CarouselControls({ current, total, previous, next }: { current: number; total: number; previous: () => void; next: () => void }) { return <div className="carousel-controls"><div className="progress"><span style={{ width: `${((current + 1) / total) * 100}%` }} /></div><span>{String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span><Button onClick={previous} disabled={current === 0} aria-label="Anterior"><ArrowLeft /></Button><Button onClick={next} disabled={current === total - 1} aria-label="Siguiente"><ArrowRight /></Button></div>; }
 
-function ProjectFintrack() { return <article className="project fintrack is-lead"><div className="project-copy"><span>01 / PIEZA PRINCIPAL · PRODUCTO DIGITAL</span><h3>FINTRACK<em>/FinanceFlow</em></h3><p>Una aplicación personal para entender el dinero sin convertirlo en una planilla.</p><small>UI · ARQUITECTURA · DESARROLLO</small></div><div className="finance-mock"><div className="mock-head"><span>FinanceFlow</span><span>Overview · Transactions · Budgets</span><b>DW</b></div><div className="balance"><small>BALANCE TOTAL</small><strong>$ 284.350</strong><span>Datos demostrativos</span></div><div className="chart"><i/><i/><i/><i/><i/><i/><i/></div><div className="finance-stats"><div><small>INGRESOS</small><b>$ 96.200</b></div><div><small>GASTOS</small><b>$ 48.640</b></div><div><small>AHORRO</small><b>32%</b></div></div><div className="phone-mock"><span>Balance</span><strong>$284.350</strong><div className="phone-chart"/><small>Vista móvil · demo</small></div></div></article>; }
+function ProjectFintrack() {
+  // Etiquetas, navegación y secciones tal como están en el repo de la app.
+  const nav = ["Dashboard", "Movimientos", "Cuentas", "Tarjetas", "Ahorros", "Préstamos", "Cuentas Fijas"];
+  const metrics: [string, string, string][] = [
+    ["Balance total", "$ 284.350", "bal"],
+    ["Ingresos del mes", "$ 96.200", "in"],
+    ["Gastos del mes", "$ 48.640", "out"],
+    ["Total ahorrado", "$ 91.400", "save"],
+  ];
+  const cuotas: [string, string, number][] = [
+    ["Notebook", "6 / 12", 50],
+    ["Bicicleta", "3 / 9", 33],
+    ["Curso de diseño", "8 / 10", 80],
+    ["Celular", "2 / 6", 33],
+  ];
+  return <article className="project fintrack is-lead"><div className="project-copy"><span>01 / PIEZA PRINCIPAL · PRODUCTO DIGITAL</span><h3>FINTRACK<em>/FinanceFlow</em></h3><p>Una aplicación personal para entender el dinero sin convertirlo en una planilla.</p><small>UI · ARQUITECTURA · DESARROLLO</small></div><div className="finance-mock"><aside className="ff-rail"><b>FinTrack</b><ul>{nav.map((item, i) => <li key={item} className={i === 0 ? "is-on" : ""}>{item}</li>)}</ul></aside><div className="ff-main"><div className="ff-head"><span>Dashboard</span><span>Septiembre 2026</span></div><div className="ff-metrics">{metrics.map(([label, value, kind]) => <div className={`ff-card ff-${kind}`} key={label}><small>{label}</small><strong>{value}</strong></div>)}</div><div className="ff-lower"><div className="ff-panel"><small>Compras en cuotas</small><ul>{cuotas.map(([name, step, pct]) => <li key={name}><span>{name}</span><b>{step}</b><i><u style={{ width: `${pct}%` }} /></i></li>)}</ul></div><div className="ff-panel"><small>Evolución</small><div className="ff-chart">{[38, 62, 47, 81, 58, 92, 71].map((h, i) => <i key={i} style={{ height: `${h}%` }} />)}</div></div></div><span className="ff-note">Datos demostrativos</span></div></div></article>;
+}
+
 function ProjectRescoldo() {
   const carta = [
   ["Cordero pesado de Rocha a la cruz", "Seis horas abierto frente al fuego. Chimichurri de menta de la huerta y nada más.", "32"],
