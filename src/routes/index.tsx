@@ -6,17 +6,21 @@ import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
-    { title: "Dylan Webs — Memo 2026" },
-    { name: "description", content: "Un memo sobre páginas web que convierten atención en acción para negocios locales." },
-    { property: "og:title", content: "Dylan Webs — Memo 2026" },
-    { property: "og:description", content: "Diseño y desarrollo páginas web para negocios locales de Uruguay." },
+    { title: "Dylan Webs — Páginas web para negocios locales" },
+    { name: "description", content: "Diseño y desarrollo de páginas web para negocios de Uruguay. Convertí en consultas la atención que ya tenés." },
+    { property: "og:title", content: "Dylan Webs — Páginas web para negocios locales" },
+    { property: "og:description", content: "Diseño y desarrollo de páginas web para negocios de Uruguay. Convertí en consultas la atención que ya tenés." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
   ] }),
   component: Index,
 });
 
-const slides = ["Portada", "La fricción", "Evidencia", "El servicio", "Encaje", "Proceso", "Portfolio", "Diferencia", "Ahora", "90 días"];
+const slides = ["Portada", "El problema", "Lo que veo", "Qué hago", "Trabajo", "Cómo lo hago", "Qué incluye", "Por qué conmigo", "Para quién es", "Empecemos"];
+// TODO Dylan: completar antes de publicar. Sin esto, la slide 10 no cierra.
+const WHATSAPP = "598XXXXXXXX";
+const EMAIL = "hola@dylanwebs.uy";
+
 const audits = [
   ["El Bosque", "Restaurante · Prado", "La reserva termina en una conversación de WhatsApp, sin contexto previo."],
   ["Salvaje", "Gastronomía", "Precios y propuesta viven dispersos entre publicaciones e historias."],
@@ -188,35 +192,23 @@ function Index() {
       </Slide>
 
       <Slide id={3} className="audit-slide ink-slide">
-        <SlideHead number="03 / 10" label="MUESTRA EXPLORATORIA" />
-        <div className="audit-intro"><div><strong>6/6</strong><span>presentaron al menos una fricción digital que una web podría reducir.</span></div><p>Patrones observados en una revisión pública y acotada. No es un estudio estadístico del mercado.</p></div>
-        <div className="carousel" ref={audit.ref} onScroll={audit.syncIndex} onKeyDown={audit.onKeyDown} tabIndex={0} role="group" aria-roledescription="carrusel" aria-label="Auditorías de negocios locales">
+        <SlideHead number="03 / 10" label="LO QUE VEO" />
+        <div className="audit-intro"><div><strong>6/6</strong><span>presentaron al menos una fricción digital que una web podría reducir.</span></div><p>Seis negocios de Montevideo, mirados desde afuera igual que los mira un cliente.</p></div>
+        <div className="carousel" ref={audit.ref} onScroll={audit.syncIndex} onKeyDown={audit.onKeyDown} tabIndex={0} role="group" aria-roledescription="carrusel" aria-label="Negocios observados">
           {audits.map(([name, category, issue], index) => <article className="audit-card" key={name}><div className="card-number">{String(index + 1).padStart(2, "0")}</div><div><p className="kicker">{category}</p><h3>{name}</h3></div><p className="audit-copy">{issue}</p><span className="card-mark">DW / AUDIT</span></article>)}
         </div>
         <CarouselControls current={audit.index} total={audits.length} previous={() => audit.goTo(audit.index - 1)} next={() => audit.goTo(audit.index + 1)} />
       </Slide>
 
-      <Slide id={4} className="ink-slide service-slide">
-        <SlideHead number="04 / 10" label="LA OFERTA" />
+      <Slide id={4} className="service-slide">
+        <SlideHead number="04 / 10" label="QUÉ HAGO" />
         <div className="service-statement"><p>Una especialidad.</p><h2>Diseño y desarrollo<br />páginas web para<br /><em>negocios locales.</em></h2></div>
         <div className="anti-list"><span>No IA</span><span>No automatizaciones</span><span>No marketing mensual</span><span>No “soluciones 360”</span></div>
-        <div className="service-bottom"><p>Cada web se organiza alrededor de una acción concreta.</p><div className="action-marquee">{["RESERVAR", "COMPRAR", "CONSULTAR", "VER MENÚ", "PEDIR PRESUPUESTO", "VISITAR"].map((word, index) => <span key={word}>{index > 0 && <i className="sep"> · </i>}{word}</span>)}</div><div className="service-groups"><div><small>BASE</small><span>Arquitectura, diseño responsive, desarrollo y performance.</span></div><div><small>NEGOCIO</small><span>Menú, catálogo, servicios, precios y formularios.</span></div><div><small>SALIDA</small><span>WhatsApp, Maps, reservas, dominio, analytics y SEO local.</span></div></div></div>
+        <div className="service-bottom"><p>Cada web se organiza alrededor de una acción concreta.</p><div className="action-marquee">{["RESERVAR", "COMPRAR", "CONSULTAR", "VER MENÚ", "PEDIR PRESUPUESTO", "VISITAR"].map((word, index) => <span key={word}>{index > 0 && <i className="sep"> · </i>}{word}</span>)}</div></div>
       </Slide>
 
-      <Slide id={5}>
-        <SlideHead number="05 / 10" label="CLIENTE IDEAL" />
-        <div className="fit-title"><span>El filtro también<br />es parte del servicio.</span><h2>¿Tiene<br /><em>sentido?</em></h2></div>
-        <div className="fit-columns"><article><h3>Sí, cuando</h3><ul><li>El negocio está activo y ya recibe consultas.</li><li>Los productos o servicios están claros.</li><li>Instagram tiene movimiento.</li><li>Quieren dejar de responder siempre lo mismo.</li></ul></article><article><h3>No todavía, cuando</h3><ul><li>El negocio aún no sabe qué vende.</li><li>La única prioridad es “algo barato”.</li><li>Esperan que una web genere clientes sola.</li><li>Primero necesitan campañas, no infraestructura web.</li></ul></article></div>
-      </Slide>
-
-      <Slide id={6} className="process-slide ink-slide">
-        <SlideHead number="06 / 10" label="PROCESO" />
-        <div className="process-title"><h2>Simple de explicar.<br /><em>Riguroso al hacer.</em></h2><p>Una secuencia corta para no diseñar antes de entender.</p></div>
-        <ol className="timeline">{[["Entender", "Qué vende el negocio y qué necesita hacer su cliente."], ["Ordenar", "Contenido, estructura, navegación y acción principal."], ["Diseñar", "La identidad visual aplicada a la experiencia."], ["Construir", "Desarrollo responsive, rendimiento e integraciones."], ["Publicar", "Dominio, medición, control de calidad y lanzamiento."]].map(([title, copy], index) => <li key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></li>)}</ol>
-      </Slide>
-
-      <Slide id={7} className="portfolio-slide ink-slide">
-        <SlideHead number="07 / 10" label="PROYECTOS SELECCIONADOS" />
+      <Slide id={5} className="portfolio-slide ink-slide">
+        <SlideHead number="05 / 10" label="TRABAJO" />
         <div className="project-carousel" ref={portfolio.ref} onScroll={portfolio.syncIndex} onKeyDown={portfolio.onKeyDown} tabIndex={0} role="group" aria-roledescription="carrusel" aria-label="Proyectos seleccionados">
           <ProjectFintrack />
           <ProjectRescoldo />
@@ -225,23 +217,44 @@ function Index() {
         <CarouselControls current={portfolio.index} total={3} previous={() => portfolio.goTo(portfolio.index - 1)} next={() => portfolio.goTo(portfolio.index + 1)} />
       </Slide>
 
-      <Slide id={8}>
-        <SlideHead number="08 / 10" label="DIFERENCIA" />
-        <h2 className="difference-title">No se trata de ser<br />“el mejor desarrollador”.<br /><em>Se trata de mirar bien.</em></h2>
-        <div className="difference-grid">{[["Foco", "Trabajo específicamente con webs."], ["Contexto local", "Entiendo cómo consultan y compran los negocios uruguayos."], ["Diseño + desarrollo", "No entrego solamente un archivo. Lo construyo."], ["Pensamiento comercial", "Primero pregunto qué queremos que haga la persona."], ["Contacto directo", "El cliente habla conmigo, no con cinco departamentos."]].map(([title, copy], index) => <article key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div>
+      <Slide id={6} className="process-slide ink-slide">
+        <SlideHead number="06 / 10" label="CÓMO LO HAGO" />
+        <div className="process-title"><h2>Simple de explicar.<br /><em>Riguroso al hacer.</em></h2><p>Una secuencia corta para no diseñar antes de entender.</p></div>
+        <ol className="timeline">{[["Entender", "Qué vende el negocio y qué necesita hacer su cliente."], ["Ordenar", "Contenido, estructura, navegación y acción principal."], ["Diseñar", "La identidad visual aplicada a la experiencia."], ["Construir", "Desarrollo responsive, rendimiento e integraciones."], ["Publicar", "Dominio, medición, control de calidad y lanzamiento."]].map(([title, copy], index) => <li key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></li>)}</ol>
       </Slide>
 
-      <Slide id={9} className="status-slide ink-slide">
-        <SlideHead number="09 / 10" label="TRANSPARENCIA" />
-        <div className="status-copy"><p>Etapa inicial,<br />criterio claro.</p><h2>No necesito inventar<br />tracción para demostrar<br /><em>cómo pienso.</em></h2></div>
-        <div className="status-columns"><article><span>YA EXISTE</span><ul><li>Capacidad técnica</li><li>Portfolio y proyectos</li><li>Auditorías y conocimiento</li><li>Un proceso definido</li></ul></article><article><span>FALTA VALIDAR</span><ul><li>Adquisición consistente</li><li>Pricing</li><li>Conversiones</li><li>Casos pagos y testimonios</li></ul></article></div>
+      <Slide id={7} className="includes-slide ink-slide">
+        <SlideHead number="07 / 10" label="QUÉ INCLUYE" />
+        <div className="includes-title"><h2>Todo lo que entra<br /><em>en una web.</em></h2><p>Sin módulos sueltos ni extras que aparecen al final.</p></div>
+        <div className="includes-grid">
+          {[["Base", ["Arquitectura de contenido", "Diseño responsive", "Desarrollo a medida", "Performance y carga"]],
+            ["Negocio", ["Menú o catálogo", "Servicios y precios", "Formularios de contacto", "Textos y jerarquía"]],
+            ["Salida", ["WhatsApp y llamada", "Google Maps", "Reservas o pedidos", "Dominio y correo", "Analytics", "SEO local"]]].map(([group, items], index) => (
+            <article key={group as string}><span className="includes-num">{String(index + 1).padStart(2, "0")}</span><h3>{group as string}</h3><ul>{(items as string[]).map((item) => <li key={item}>{item}</li>)}</ul></article>
+          ))}
+        </div>
+      </Slide>
+
+      <Slide id={8}>
+        <SlideHead number="08 / 10" label="POR QUÉ CONMIGO" />
+        <h2 className="difference-title">Diseño y construyo yo.<br /><em>Hablás siempre conmigo.</em></h2>
+        <div className="difference-grid">{[["Foco", "Trabajo específicamente con webs. No hago de todo un poco."], ["Contexto local", "Entiendo cómo consultan y compran los negocios uruguayos."], ["Diseño + desarrollo", "No entrego solamente un archivo. Lo construyo."], ["Pensamiento comercial", "Primero pregunto qué queremos que haga la persona."], ["Contacto directo", "El cliente habla conmigo, no con cinco departamentos."]].map(([title, copy], index) => <article key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div>
+      </Slide>
+
+      <Slide id={9} className="fit-slide ink-slide">
+        <SlideHead number="09 / 10" label="PARA QUIÉN ES" />
+        <div className="fit-title"><span>El encaje también<br />es parte del trabajo.</span><h2>Funciona<br /><em>mejor</em> cuando…</h2></div>
+        <div className="fit-list">
+          <ul>{["El negocio está activo y ya recibe consultas.", "Los productos o servicios están claros.", "Instagram tiene movimiento.", "Querés dejar de responder siempre lo mismo."].map((item) => <li key={item}>{item}</li>)}</ul>
+          <p className="fit-note">Si tu negocio todavía está definiendo qué vende, te lo digo. Prefiero eso antes que venderte una web que no va a rendir.</p>
+        </div>
       </Slide>
 
       <Slide id={10} className="final-slide ink-slide">
-        <SlideHead number="10 / 10" label="PRÓXIMOS 90 DÍAS" />
-        <div className="ninety-grid">{[["0—30", "Publicar", "Cerrar posicionamiento, portfolio y oferta."], ["31—60", "Prospectar", "Contactar negocios seleccionados con auditorías personalizadas."], ["61—90", "Primeros casos", "Cerrar proyectos, documentar, obtener testimonios y ajustar pricing."]].map(([days, title, copy]) => <article key={days}><strong>{days}</strong><h3>{title}</h3><p>{copy}</p></article>)}</div>
-        <div className="closing"><div><p>La tesis</p><h2>La atención ya existe.<br /><em>La oportunidad está después.</em></h2></div><a href="https://instagram.com/dylan.webs.uy" target="_blank" rel="noreferrer">@dylan.webs.uy <ExternalLink size={18} /></a></div>
-        <footer><span>DYLAN WEBS © 2026</span><span><MapPin size={14} /> MONTEVIDEO, URUGUAY</span><span>FIN DEL MEMO</span></footer>
+        <SlideHead number="10 / 10" label="EMPECEMOS" />
+        <div className="ninety-grid">{[["01", "Escribime", "Contame qué vendés y qué querés que haga tu cliente."], ["02", "Conversamos", "Media hora para entender el negocio antes de proponer nada."], ["03", "Propuesta", "Alcance, plazo y precio por escrito. Sin sorpresas después."]].map(([step, title, copy]) => <article key={step}><strong>{step}</strong><h3>{title}</h3><p>{copy}</p></article>)}</div>
+        <div className="closing"><div><p>En resumen</p><h2>La atención ya existe.<br /><em>La oportunidad está después.</em></h2></div><div className="contact"><a href="https://instagram.com/dylan.webs.uy" target="_blank" rel="noreferrer">@dylan.webs.uy <ExternalLink size={16} /></a><a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noreferrer">WhatsApp <ExternalLink size={16} /></a><a href={`mailto:${EMAIL}`}>{EMAIL} <ExternalLink size={16} /></a></div></div>
+        <footer><span>DYLAN WEBS © 2026</span><span><MapPin size={14} /> MONTEVIDEO, URUGUAY</span><span>HABLEMOS</span></footer>
       </Slide>
     </main>
   );
