@@ -79,13 +79,13 @@ function Index() {
         <div className="meta-row"><span>DYLAN WEBS</span><span>MONTEVIDEO · URUGUAY</span><span>MEMO / 2026</span></div>
         <div className="hero-center">
           <p className="kicker">Atención ≠ acción</p>
-          <h1>Instagram consigue<br />la <em>atención.</em><br /><span>Tu web hace el resto.</span></h1>
+          <h1>Instagram consigue<br />la <em>atención.</em><br /><span>Tu web hace el <b className="grad-word">resto.</b></span></h1>
         </div>
         <div className="hero-foot"><p>Diseño y desarrollo web<br />para negocios locales.</p><Button variant="accent" onClick={() => jump(1)} aria-label="Continuar"><ArrowDown /></Button></div>
         <div className="hero-index">01</div>
       </Slide>
 
-      <Slide id={2}>
+      <Slide id={2} className="ink-slide">
         <SlideHead number="02 / 10" label="EL PROBLEMA" />
         <div className="problem-layout">
           <h2>Tus clientes ya te encontraron.<br /><em>Ahora tienen que entender qué hacer.</em></h2>
@@ -95,7 +95,7 @@ function Index() {
         </div>
       </Slide>
 
-      <Slide id={3} className="audit-slide">
+      <Slide id={3} className="audit-slide ink-slide">
         <SlideHead number="03 / 10" label="MUESTRA EXPLORATORIA" />
         <div className="audit-intro"><div><strong>6/6</strong><span>presentaron al menos una fricción digital que una web podría reducir.</span></div><p>Patrones observados en una revisión pública y acotada. No es un estudio estadístico del mercado.</p></div>
         <div className="carousel" ref={auditRef} onScroll={(e) => setAuditIndex(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))} tabIndex={0} aria-label="Auditorías de negocios locales">
@@ -108,7 +108,7 @@ function Index() {
         <SlideHead number="04 / 10" label="LA OFERTA" />
         <div className="service-statement"><p>Una especialidad.</p><h2>Diseño y desarrollo<br />páginas web para<br /><em>negocios locales.</em></h2></div>
         <div className="anti-list"><span>No IA</span><span>No automatizaciones</span><span>No marketing mensual</span><span>No “soluciones 360”</span></div>
-        <div className="service-bottom"><p>Cada web se organiza alrededor de una acción concreta.</p><div className="action-marquee">RESERVAR · COMPRAR · CONSULTAR · VER MENÚ · PEDIR PRESUPUESTO · VISITAR</div><div className="service-groups"><div><small>BASE</small><span>Arquitectura, diseño responsive, desarrollo y performance.</span></div><div><small>NEGOCIO</small><span>Menú, catálogo, servicios, precios y formularios.</span></div><div><small>SALIDA</small><span>WhatsApp, Maps, reservas, dominio, analytics y SEO local.</span></div></div></div>
+        <div className="service-bottom"><p>Cada web se organiza alrededor de una acción concreta.</p><div className="action-marquee">{["RESERVAR", "COMPRAR", "CONSULTAR", "VER MENÚ", "PEDIR PRESUPUESTO", "VISITAR"].map((word, index) => <span key={word}>{index > 0 && <i className="sep"> · </i>}{word}</span>)}</div><div className="service-groups"><div><small>BASE</small><span>Arquitectura, diseño responsive, desarrollo y performance.</span></div><div><small>NEGOCIO</small><span>Menú, catálogo, servicios, precios y formularios.</span></div><div><small>SALIDA</small><span>WhatsApp, Maps, reservas, dominio, analytics y SEO local.</span></div></div></div>
       </Slide>
 
       <Slide id={5}>
@@ -117,7 +117,7 @@ function Index() {
         <div className="fit-columns"><article><h3>Sí, cuando</h3><ul><li>El negocio está activo y ya recibe consultas.</li><li>Los productos o servicios están claros.</li><li>Instagram tiene movimiento.</li><li>Quieren dejar de responder siempre lo mismo.</li></ul></article><article><h3>No todavía, cuando</h3><ul><li>El negocio aún no sabe qué vende.</li><li>La única prioridad es “algo barato”.</li><li>Esperan que una web genere clientes sola.</li><li>Primero necesitan campañas, no infraestructura web.</li></ul></article></div>
       </Slide>
 
-      <Slide id={6} className="process-slide">
+      <Slide id={6} className="process-slide ink-slide">
         <SlideHead number="06 / 10" label="PROCESO" />
         <div className="process-title"><h2>Simple de explicar.<br /><em>Riguroso al hacer.</em></h2><p>Una secuencia corta para no diseñar antes de entender.</p></div>
         <ol className="timeline">{[["Entender", "Qué vende el negocio y qué necesita hacer su cliente."], ["Ordenar", "Contenido, estructura, navegación y acción principal."], ["Diseñar", "La identidad visual aplicada a la experiencia."], ["Construir", "Desarrollo responsive, rendimiento e integraciones."], ["Publicar", "Dominio, medición, control de calidad y lanzamiento."]].map(([title, copy], index) => <li key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></li>)}</ol>
@@ -139,7 +139,7 @@ function Index() {
         <div className="difference-grid">{[["Foco", "Trabajo específicamente con webs."], ["Contexto local", "Entiendo cómo consultan y compran los negocios uruguayos."], ["Diseño + desarrollo", "No entrego solamente un archivo. Lo construyo."], ["Pensamiento comercial", "Primero pregunto qué queremos que haga la persona."], ["Contacto directo", "El cliente habla conmigo, no con cinco departamentos."]].map(([title, copy], index) => <article key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div>
       </Slide>
 
-      <Slide id={9} className="status-slide">
+      <Slide id={9} className="status-slide ink-slide">
         <SlideHead number="09 / 10" label="TRANSPARENCIA" />
         <div className="status-copy"><p>Etapa inicial,<br />criterio claro.</p><h2>No necesito inventar<br />tracción para demostrar<br /><em>cómo pienso.</em></h2></div>
         <div className="status-columns"><article><span>YA EXISTE</span><ul><li>Capacidad técnica</li><li>Portfolio y proyectos</li><li>Auditorías y conocimiento</li><li>Un proceso definido</li></ul></article><article><span>FALTA VALIDAR</span><ul><li>Adquisición consistente</li><li>Pricing</li><li>Conversiones</li><li>Casos pagos y testimonios</li></ul></article></div>
