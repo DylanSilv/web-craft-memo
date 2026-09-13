@@ -199,7 +199,7 @@ em { font-family: var(--font-serif); font-weight: 600; text-transform: none; }
 .hero-center h1 span { color: var(--foreground); }
 .grad-word { font-weight: inherit; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero-foot { z-index: 2; display: flex; justify-content: space-between; align-items: end; font-size: .9rem; text-transform: uppercase; }
-.hero-index { position: absolute; right: -1vw; bottom: -8vw; font-size: 32vw; line-height: .8; font-weight: 700; color: var(--ink-700); }
+
 
 h2 { font-size: clamp(3rem, 6.5vw, 7rem); line-height: .92; font-weight: 600; }
 .problem-layout { position: relative; z-index: 2; padding-top: 8vh; }

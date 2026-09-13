@@ -312,7 +312,6 @@ function Index() {
           <h1>Instagram consigue<br />la <em>atención.</em><br /><span>Tu web hace el <b className="grad-word">resto.</b></span></h1>
         </div>
         <div className="hero-foot" data-reveal data-delay="2"><p>Diseño y desarrollo web<br />para negocios locales.</p><Button variant="accent" onClick={() => jump(1)} aria-label="Continuar"><ArrowDown /></Button></div>
-        <div className="hero-index" data-depth="0.34">01</div>
       </Slide>
 
       <Slide id={2} className="ink-slide">
