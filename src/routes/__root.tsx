@@ -105,6 +105,16 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        {/* Antes del primer pintado: si esto no corre, el contenido se ve igual
+            (el estado oculto cuelga de .motion-ready). Puesto acá y no en un
+            efecto porque para entonces el hero ya pintó visible y el navegador
+            no tiene desde dónde animar. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('motion-ready')}}catch(e){}",
+          }}
+        />
       </head>
       <body>
         {children}
