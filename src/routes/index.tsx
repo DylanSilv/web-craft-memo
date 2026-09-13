@@ -124,19 +124,34 @@ function useReveal() {
   useEffect(() => {
     const nodes = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
     if (!nodes.length) return;
-    // Recién acá se activa el estado inicial oculto: si el JS no corre, el
-    // contenido se ve igual en vez de quedar una página en blanco.
     document.documentElement.classList.add("motion-ready");
+    // Marca que el JS llegó a correr: desactiva la red de seguridad de CSS,
+    // que si no dejaría todo fijo en visible y mataría el reinicio.
+    document.documentElement.classList.add("js-ok");
     if (reduced()) { nodes.forEach((n) => n.classList.add("is-in")); return; }
-    const io = new IntersectionObserver((entries) => {
+
+    // Dos observadores a propósito, con umbrales distintos:
+    // entra cuando se ve un 12%, se reinicia solo cuando salió del todo.
+    // Así nada de lo que está en pantalla se desvanece nunca.
+    const entrar = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-in");
-        io.unobserve(entry.target);
+        // Dos criterios: un 12% del elemento, o que lo que se ve de él ya ocupe
+        // un tercio de la pantalla. Sin el segundo, un bloque más alto que el
+        // viewport nunca llega al 12% y se quedaría invisible tapando la vista.
+        const suficiente =
+          entry.intersectionRatio >= 0.12 ||
+          entry.intersectionRect.height >= window.innerHeight * 0.33;
+        if (suficiente) entry.target.classList.add("is-in");
       });
-    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
-    nodes.forEach((n) => io.observe(n));
-    return () => io.disconnect();
+    }, { threshold: [0, 0.02, 0.05, 0.08, 0.12, 0.25, 0.5], rootMargin: "0px 0px -6% 0px" });
+
+    const salir = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => { if (!entry.isIntersecting) entry.target.classList.remove("is-in"); });
+    }, { threshold: 0, rootMargin: "0px" });
+
+    nodes.forEach((n) => { entrar.observe(n); salir.observe(n); });
+    return () => { entrar.disconnect(); salir.disconnect(); };
   }, []);
 }
 
