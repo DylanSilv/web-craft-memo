@@ -16,19 +16,11 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const slides = ["Portada", "El problema", "Lo que veo", "Qué hago", "Trabajo", "Cómo lo hago", "Qué incluye", "Por qué conmigo", "Para quién es", "Empecemos"];
+const slides = ["Portada", "El problema", "Qué hago", "Trabajo", "Cómo lo hago", "Qué incluye", "Por qué conmigo", "Para quién es", "Empecemos"];
 // TODO Dylan: completar antes de publicar. Sin esto, la slide 10 no cierra.
 const WHATSAPP = "598XXXXXXXX";
 const EMAIL = "hola@dylanwebs.uy";
 
-const audits = [
-  ["El Bosque", "Restaurante · Prado", "La reserva termina en una conversación de WhatsApp, sin contexto previo."],
-  ["Salvaje", "Gastronomía", "Precios y propuesta viven dispersos entre publicaciones e historias."],
-  ["Finta", "Gastronomía", "La información clave depende de plataformas externas y cambia de lugar."],
-  ["Topfit", "Entrenamiento", "Servicios y modalidades requieren una consulta antes de poder compararlos."],
-  ["Panther Gym", "Gimnasio", "Horarios y planes no tienen un punto de consulta único y permanente."],
-  ["Prime Burgers", "Gastronomía", "El recorrido salta de Instagram a menú externo y luego a otra plataforma."],
-];
 
 
 
@@ -222,7 +214,6 @@ function useCarousel(count: number) {
 
 function Index() {
   const [activeSlide, setActiveSlide] = useState(0);
-  const audit = useCarousel(audits.length);
   const portfolio = useCarousel(3);
 
   useEffect(() => {
@@ -264,7 +255,7 @@ function Index() {
       <aside className="rail" aria-label="Navegación de la presentación">
         <span className="rail-brand">DW.</span>
         <div className="rail-links">{slides.map((label, index) => <button key={label} className={activeSlide === index ? "is-active" : ""} onClick={() => jump(index)} aria-label={`Ir a ${label}`}><span>{String(index + 1).padStart(2, "0")}</span></button>)}</div>
-        <span className="rail-total">/10</span>
+        <span className="rail-total">/{String(slides.length).padStart(2, "0")}</span>
       </aside>
 
       <Slide id={1} className="hero-slide ink-slide">
@@ -278,7 +269,7 @@ function Index() {
       </Slide>
 
       <Slide id={2} className="ink-slide">
-        <SlideHead number="02 / 10" label="EL PROBLEMA" />
+        <SlideHead n={2} label="EL PROBLEMA" />
         <div className="problem-layout">
           <h2 data-reveal>Tus clientes ya te encontraron.<br /><em>Ahora tienen que entender qué hacer.</em></h2>
           <div className="journey" data-reveal data-stagger aria-label="Recorrido del cliente">{["Descubrir", "Entender", "Confiar", "Actuar"].map((step, index) => <div key={step} className={index === 0 ? "muted-step" : ""}><span>0{index + 1}</span><strong>{step}</strong></div>)}</div>
@@ -287,24 +278,15 @@ function Index() {
         </div>
       </Slide>
 
-      <Slide id={3} className="audit-slide ink-slide">
-        <SlideHead number="03 / 10" label="LO QUE VEO" />
-        <div className="audit-intro" data-reveal><div><strong>6/6</strong><span>presentaron al menos una fricción digital que una web podría reducir.</span></div><p>Seis negocios de Montevideo, mirados desde afuera igual que los mira un cliente.</p></div>
-        <div className="carousel" ref={audit.ref} onScroll={audit.syncIndex} onKeyDown={audit.onKeyDown} tabIndex={0} role="group" aria-roledescription="carrusel" aria-label="Negocios observados">
-          {audits.map(([name, category, issue], index) => <article className="audit-card" key={name}><div className="card-number">{String(index + 1).padStart(2, "0")}</div><div><p className="kicker">{category}</p><h3>{name}</h3></div><p className="audit-copy">{issue}</p><span className="card-mark">DW / AUDIT</span></article>)}
-        </div>
-        <CarouselControls current={audit.index} total={audits.length} previous={() => audit.goTo(audit.index - 1)} next={() => audit.goTo(audit.index + 1)} />
-      </Slide>
-
-      <Slide id={4} className="service-slide">
-        <SlideHead number="04 / 10" label="QUÉ HAGO" />
+      <Slide id={3} className="service-slide">
+        <SlideHead n={3} label="QUÉ HAGO" />
         <div className="service-statement" data-reveal><p>Una especialidad.</p><h2>Diseño y desarrollo<br />páginas web para<br /><em>negocios locales.</em></h2></div>
         <div className="anti-list"><span>No IA</span><span>No automatizaciones</span><span>No marketing mensual</span><span>No “soluciones 360”</span></div>
         <div className="service-bottom" data-reveal data-delay="1"><p>Cada web se organiza alrededor de una acción concreta.</p><div className="action-marquee">{["RESERVAR", "COMPRAR", "CONSULTAR", "VER MENÚ", "PEDIR PRESUPUESTO", "VISITAR"].map((word, index) => <span key={word}>{index > 0 && <i className="sep"> · </i>}{word}</span>)}</div></div>
       </Slide>
 
-      <Slide id={5} className="portfolio-slide ink-slide">
-        <SlideHead number="05 / 10" label="TRABAJO" />
+      <Slide id={4} className="portfolio-slide ink-slide">
+        <SlideHead n={4} label="TRABAJO" />
         <div className="project-carousel" ref={portfolio.ref} onScroll={portfolio.syncIndex} onKeyDown={portfolio.onKeyDown} tabIndex={0} role="group" aria-roledescription="carrusel" aria-label="Proyectos seleccionados">
           <ProjectFintrack />
           <ProjectRescoldo />
@@ -313,14 +295,14 @@ function Index() {
         <CarouselControls current={portfolio.index} total={3} previous={() => portfolio.goTo(portfolio.index - 1)} next={() => portfolio.goTo(portfolio.index + 1)} />
       </Slide>
 
-      <Slide id={6} className="process-slide ink-slide">
-        <SlideHead number="06 / 10" label="CÓMO LO HAGO" />
+      <Slide id={5} className="process-slide ink-slide">
+        <SlideHead n={5} label="CÓMO LO HAGO" />
         <div className="process-title" data-reveal><h2>Simple de explicar.<br /><em>Riguroso al hacer.</em></h2><p>Una secuencia corta para no diseñar antes de entender.</p></div>
         <ol className="timeline" data-reveal data-stagger>{[["Entender", "Qué vende el negocio y qué necesita hacer su cliente."], ["Ordenar", "Contenido, estructura, navegación y acción principal."], ["Diseñar", "La identidad visual aplicada a la experiencia."], ["Construir", "Desarrollo responsive, rendimiento e integraciones."], ["Publicar", "Dominio, medición, control de calidad y lanzamiento."]].map(([title, copy], index) => <li key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></li>)}</ol>
       </Slide>
 
-      <Slide id={7} className="includes-slide ink-slide">
-        <SlideHead number="07 / 10" label="QUÉ INCLUYE" />
+      <Slide id={6} className="includes-slide ink-slide">
+        <SlideHead n={6} label="QUÉ INCLUYE" />
         <div className="includes-title" data-reveal><h2>Todo lo que entra<br /><em>en una web.</em></h2><p>Sin módulos sueltos ni extras que aparecen al final.</p></div>
         <div className="includes-grid" data-reveal data-stagger>
           {[["Base", ["Arquitectura de contenido", "Diseño responsive", "Desarrollo a medida", "Performance y carga"]],
@@ -331,25 +313,25 @@ function Index() {
         </div>
       </Slide>
 
-      <Slide id={8}>
-        <SlideHead number="08 / 10" label="POR QUÉ CONMIGO" />
+      <Slide id={7}>
+        <SlideHead n={7} label="POR QUÉ CONMIGO" />
         <h2 className="difference-title" data-reveal>Diseño y construyo yo.<br /><em>Hablás siempre conmigo.</em></h2>
         <div className="difference-grid" data-reveal data-stagger>{[["Foco", "Trabajo específicamente con webs. No hago de todo un poco."], ["Contexto local", "Entiendo cómo consultan y compran los negocios uruguayos."], ["Diseño + desarrollo", "No entrego solamente un archivo. Lo construyo."], ["Pensamiento comercial", "Primero pregunto qué queremos que haga la persona."], ["Contacto directo", "El cliente habla conmigo, no con cinco departamentos."]].map(([title, copy], index) => <article key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div>
       </Slide>
 
-      <Slide id={9} className="fit-slide ink-slide">
-        <SlideHead number="09 / 10" label="PARA QUIÉN ES" />
-        <div className="fit-title" data-reveal><span>El encaje también<br />es parte del trabajo.</span><h2>Funciona<br /><em>mejor</em> cuando…</h2></div>
+      <Slide id={8} className="fit-slide ink-slide">
+        <SlideHead n={8} label="PARA QUIÉN ES" />
+        <div className="fit-title" data-reveal><h2>Funciona<br /><em>mejor</em> cuando…</h2><span>El encaje también<br />es parte del trabajo.</span></div>
         <div className="fit-list" data-reveal data-delay="1">
           <ul>{["El negocio está activo y ya recibe consultas.", "Los productos o servicios están claros.", "Instagram tiene movimiento.", "Querés dejar de responder siempre lo mismo."].map((item) => <li key={item}>{item}</li>)}</ul>
           <p className="fit-note">Si tu negocio todavía está definiendo qué vende, te lo digo. Prefiero eso antes que venderte una web que no va a rendir.</p>
         </div>
       </Slide>
 
-      <Slide id={10} className="final-slide ink-slide">
-        <SlideHead number="10 / 10" label="EMPECEMOS" />
+      <Slide id={9} className="final-slide ink-slide">
+        <SlideHead n={9} label="EMPECEMOS" />
         <div className="ninety-grid" data-reveal data-stagger>{[["01", "Escribime", "Contame qué vendés y qué querés que haga tu cliente."], ["02", "Conversamos", "Media hora para entender el negocio antes de proponer nada."], ["03", "Propuesta", "Alcance, plazo y precio por escrito. Sin sorpresas después."]].map(([step, title, copy]) => <article key={step}><strong>{step}</strong><h3>{title}</h3><p>{copy}</p></article>)}</div>
-        <div className="closing" data-reveal data-delay="1"><div><p>En resumen</p><h2>La atención ya existe.<br /><em>La oportunidad está después.</em></h2></div><div className="contact"><a href="https://instagram.com/dylan.webs.uy" target="_blank" rel="noreferrer">@dylan.webs.uy <ExternalLink size={16} /></a><a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noreferrer">WhatsApp <ExternalLink size={16} /></a><a href={`mailto:${EMAIL}`}>{EMAIL} <ExternalLink size={16} /></a></div></div>
+        <div className="closing" data-reveal data-delay="1"><div className="closing-thesis"><p>En resumen</p><h2>La atención ya existe.<br /><em>La oportunidad está después.</em></h2></div><div className="contact"><a href="https://instagram.com/dylan.webs.uy" target="_blank" rel="noreferrer">@dylan.webs.uy <ExternalLink size={16} /></a><a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noreferrer">WhatsApp <ExternalLink size={16} /></a><a href={`mailto:${EMAIL}`}>{EMAIL} <ExternalLink size={16} /></a></div></div>
         <footer><span>DYLAN WEBS © 2026</span><span><MapPin size={14} /> MONTEVIDEO, URUGUAY</span><span>HABLEMOS</span></footer>
       </Slide>
     </main>
@@ -359,7 +341,7 @@ function Index() {
 function Slide({ id, className = "", children }: { id: number; className?: string; children: React.ReactNode }) {
   return <section id={`slide-${id}`} data-slide={id - 1} aria-label={`${String(id).padStart(2, "0")} de 10: ${slides[id - 1]}`} className={`slide ${className}`}>{children}</section>;
 }
-function SlideHead({ number, label }: { number: string; label: string }) { return <header className="slide-head"><span>{number}</span><span>{label}</span><span>DYLAN WEBS</span></header>; }
+function SlideHead({ n, label }: { n: number; label: string }) { const pad = (v: number) => String(v).padStart(2, "0"); return <header className="slide-head"><span>{pad(n)} / {pad(slides.length)}</span><span>{label}</span><span>DYLAN WEBS</span></header>; }
 function CarouselControls({ current, total, previous, next }: { current: number; total: number; previous: () => void; next: () => void }) { return <div className="carousel-controls"><div className="progress"><span style={{ width: `${((current + 1) / total) * 100}%` }} /></div><span>{String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span><Button onClick={previous} disabled={current === 0} aria-label="Anterior"><ArrowLeft /></Button><Button onClick={next} disabled={current === total - 1} aria-label="Siguiente"><ArrowRight /></Button></div>; }
 
 function ProjectFintrack() {
