@@ -16,6 +16,21 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+// BORRADOR: el tercer elemento de cada paso es el detalle del desplegable.
+// Dylan: corregilo con tus palabras, describe cómo trabajás vos.
+const PROCESO: [string, string, string][] = [
+  ["Entender", "Qué vende el negocio y qué necesita hacer su cliente.",
+   "Miramos qué vende el negocio, qué pregunta la gente antes de comprar y qué estás resolviendo hoy a mano por WhatsApp. De ahí sale cuál es la acción principal de la web."],
+  ["Ordenar", "Contenido, estructura, navegación y acción principal.",
+   "Defino qué secciones existen, en qué orden y qué tiene que pasar en cada una. Antes de abrir una herramienta de diseño, la estructura ya está decidida."],
+  ["Diseñar", "La identidad visual aplicada a la experiencia.",
+   "Tipografía, color y composición aplicados a esa estructura. Trabajo sobre pantallas reales, no sobre plantillas: lo que ves es lo que se construye."],
+  ["Construir", "Desarrollo responsive, rendimiento e integraciones.",
+   "Desarrollo a medida, responsive desde el primer día, y las integraciones que el negocio necesita: WhatsApp, Maps, reservas y formularios."],
+  ["Publicar", "Dominio, medición, control de calidad y lanzamiento.",
+   "Dominio, correo, medición y control de calidad. Reviso en escritorio y en teléfono antes de que quede en línea."],
+];
+
 const slides = ["Portada", "El problema", "Qué hago", "Trabajo", "Cómo lo hago", "Qué incluye", "Por qué conmigo", "Para quién es", "Empecemos"];
 // TODO Dylan: completar antes de publicar. Sin esto, la slide 10 no cierra.
 const WHATSAPP = "598XXXXXXXX";
@@ -111,6 +126,25 @@ function useReveal() {
     nodes.forEach((n) => io.observe(n));
     return () => io.disconnect();
   }, []);
+}
+
+
+/** Desplegable accesible: botón con aria-expanded + panel con id asociado.
+ *  El colapsado usa visibility para que además salga del árbol de accesibilidad,
+ *  no solo de la vista. */
+function Disclosure({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={`disclosure${open ? " is-open" : ""}`}>
+      <button type="button" aria-expanded={open} aria-controls={`panel-${id}`} onClick={() => setOpen((v) => !v)}>
+        <span>{label}</span>
+        <i aria-hidden="true" />
+      </button>
+      <div className="disclosure-panel" id={`panel-${id}`} role="region">
+        <div>{children}</div>
+      </div>
+    </div>
+  );
 }
 
 function useCarousel(count: number) {
@@ -298,7 +332,7 @@ function Index() {
       <Slide id={5} className="process-slide ink-slide">
         <SlideHead n={5} label="CÓMO LO HAGO" />
         <div className="process-title" data-reveal><h2>Simple de explicar.<br /><em>Riguroso al hacer.</em></h2><p>Una secuencia corta para no diseñar antes de entender.</p></div>
-        <ol className="timeline" data-reveal data-stagger>{[["Entender", "Qué vende el negocio y qué necesita hacer su cliente."], ["Ordenar", "Contenido, estructura, navegación y acción principal."], ["Diseñar", "La identidad visual aplicada a la experiencia."], ["Construir", "Desarrollo responsive, rendimiento e integraciones."], ["Publicar", "Dominio, medición, control de calidad y lanzamiento."]].map(([title, copy], index) => <li key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></li>)}</ol>
+        <ol className="timeline" data-reveal data-stagger>{PROCESO.map(([title, copy, detalle], index) => <li key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p><Disclosure id={`paso-${index + 1}`} label="Ver detalle">{detalle}</Disclosure></li>)}</ol>
       </Slide>
 
       <Slide id={6} className="includes-slide ink-slide">
@@ -359,7 +393,7 @@ function ProjectFintrack() {
     ["Curso de diseño", "8 / 10", 80],
     ["Celular", "2 / 6", 33],
   ];
-  return <article className="project fintrack is-lead"><div className="project-copy" data-depth="-0.05"><span>01 / PIEZA PRINCIPAL · PRODUCTO DIGITAL</span><h3>FINTRACK<em>/FinanceFlow</em></h3><p>Una aplicación personal para entender el dinero sin convertirlo en una planilla.</p><small>UI · ARQUITECTURA · DESARROLLO</small></div><div className="finance-mock"><aside className="ff-rail"><b>FinTrack</b><ul>{nav.map((item, i) => <li key={item} className={i === 0 ? "is-on" : ""}>{item}</li>)}</ul></aside><div className="ff-main"><div className="ff-head"><span>Dashboard</span><span>Septiembre 2026</span></div><div className="ff-metrics">{metrics.map(([label, value, kind]) => <div className={`ff-card ff-${kind}`} key={label}><small>{label}</small><strong>{value}</strong></div>)}</div><div className="ff-lower"><div className="ff-panel"><small>Compras en cuotas</small><ul>{cuotas.map(([name, step, pct]) => <li key={name}><span>{name}</span><b>{step}</b><i><u style={{ width: `${pct}%` }} /></i></li>)}</ul></div><div className="ff-panel"><small>Evolución</small><div className="ff-chart">{[38, 62, 47, 81, 58, 92, 71].map((h, i) => <i key={i} style={{ height: `${h}%` }} />)}</div></div></div><span className="ff-note">Datos demostrativos</span></div></div></article>;
+  return <article className="project fintrack is-lead"><div className="project-copy" data-depth="-0.05"><span>01 / PIEZA PRINCIPAL · PRODUCTO DIGITAL</span><h3>FINTRACK<em>/FinanceFlow</em></h3><p>Una aplicación personal para entender el dinero sin convertirlo en una planilla.</p><small>UI · ARQUITECTURA · DESARROLLO</small><Disclosure id="fintrack" label="Qué resuelve">Panel, movimientos, cuentas, tarjetas, ahorros, préstamos y cuentas fijas. La sección de compras en cuotas es la que más se usa: es la forma en que acá se compra. Nació para reemplazar una planilla.</Disclosure></div><div className="finance-mock"><aside className="ff-rail"><b>FinTrack</b><ul>{nav.map((item, i) => <li key={item} className={i === 0 ? "is-on" : ""}>{item}</li>)}</ul></aside><div className="ff-main"><div className="ff-head"><span>Dashboard</span><span>Septiembre 2026</span></div><div className="ff-metrics">{metrics.map(([label, value, kind]) => <div className={`ff-card ff-${kind}`} key={label}><small>{label}</small><strong>{value}</strong></div>)}</div><div className="ff-lower"><div className="ff-panel"><small>Compras en cuotas</small><ul>{cuotas.map(([name, step, pct]) => <li key={name}><span>{name}</span><b>{step}</b><i><u style={{ width: `${pct}%` }} /></i></li>)}</ul></div><div className="ff-panel"><small>Evolución</small><div className="ff-chart">{[38, 62, 47, 81, 58, 92, 71].map((h, i) => <i key={i} style={{ height: `${h}%` }} />)}</div></div></div><span className="ff-note">Datos demostrativos</span></div></div></article>;
 }
 
 function ProjectRescoldo() {
@@ -369,9 +403,9 @@ function ProjectRescoldo() {
   ["Corvina negra de La Paloma", "Piel crocante, manteca de alcaparras y limón.", "28"],
   ["Bondiola de cerdo de Tarariras", "Ocho horas. Membrillo asado y su propio jugo.", "30"],
 ];
-  return <article className="project"><div className="project-copy" data-depth="-0.05"><span>02 / GASTRONOMÍA · CANELONES</span><h3>RESCOLDO</h3><p>Cocina de fuego lento en Juanicó. Un fuego por día, treinta y cuatro cubiertos.</p><small>DIRECCIÓN VISUAL · UX · DESARROLLO</small></div><div className="carta-mock"><div className="carta-nav"><span>Rescoldo</span><span>CARTA · FUEGO · RESERVAS</span></div><div className="carta-body"><div className="carta-aside"><h4>Fuego alto</h4><p>Lo que pide brasa viva. Se cocina entero y se corta en el salón.</p></div><ul className="carta-list">{carta.map(([nombre, nota, precio]) => <li key={nombre}><div><strong>{nombre}</strong><span>{nota}</span></div><b>{precio}</b></li>)}</ul></div><span className="carta-foot">El fuego se apaga. La cocina empieza.</span></div></article>;
+  return <article className="project"><div className="project-copy" data-depth="-0.05"><span>02 / GASTRONOMÍA · CANELONES</span><h3>RESCOLDO</h3><p>Cocina de fuego lento en Juanicó. Un fuego por día, treinta y cuatro cubiertos.</p><small>DIRECCIÓN VISUAL · UX · DESARROLLO</small><Disclosure id="rescoldo" label="Qué resuelve">Carta completa con secciones y precios, reservas y la historia del fuego. Un fuego por día, treinta y cuatro cubiertos, en Juanicó.</Disclosure></div><div className="carta-mock"><div className="carta-nav"><span>Rescoldo</span><span>CARTA · FUEGO · RESERVAS</span></div><div className="carta-body"><div className="carta-aside"><h4>Fuego alto</h4><p>Lo que pide brasa viva. Se cocina entero y se corta en el salón.</p></div><ul className="carta-list">{carta.map(([nombre, nota, precio]) => <li key={nombre}><div><strong>{nombre}</strong><span>{nota}</span></div><b>{precio}</b></li>)}</ul></div><span className="carta-foot">El fuego se apaga. La cocina empieza.</span></div></article>;
 }
 
 function ProjectManso() {
-  return <article className="project"><div className="project-copy" data-depth="-0.05"><span>03 / GASTRONOMÍA · CIUDAD VIEJA</span><h3>MANSO</h3><p>Cocina de brasa lenta en una casa de 1904. La reserva se resuelve entera desde el teléfono.</p><small>DIRECCIÓN VISUAL · UX · DESARROLLO</small></div><div className="manso-mock"><div className="manso-side"><span>CASA DE 1904</span><p>Ocho horas<br />de rescoldo.</p><span className="manso-addr">PIEDRAS 482<br />CIUDAD VIEJA</span></div><div className="manso-phone"><div className="manso-top"><span>MANSO</span><span className="manso-open"><i />ABIERTO</span></div><h4>Fuego lento,<br /><em>sobremesa larga.</em></h4><div className="manso-form"><div><small>FECHA</small><span>Vie 19 · Sep</span></div><div><small>HORA</small><span>21:30</span></div><div><small>PERSONAS</small><span>4</span></div></div><button tabIndex={-1}>Reservar mesa</button></div></div></article>;
+  return <article className="project"><div className="project-copy" data-depth="-0.05"><span>03 / GASTRONOMÍA · CIUDAD VIEJA</span><h3>MANSO</h3><p>Cocina de brasa lenta en una casa de 1904. La reserva se resuelve entera desde el teléfono.</p><small>DIRECCIÓN VISUAL · UX · DESARROLLO</small><Disclosure id="manso" label="Qué resuelve">La reserva se resuelve entera desde el teléfono: fecha, hora, personas y confirmación. Más carta, horarios y la casa de 1904 en Piedras 482.</Disclosure></div><div className="manso-mock"><div className="manso-side"><span>CASA DE 1904</span><p>Ocho horas<br />de rescoldo.</p><span className="manso-addr">PIEDRAS 482<br />CIUDAD VIEJA</span></div><div className="manso-phone"><div className="manso-top"><span>MANSO</span><span className="manso-open"><i />ABIERTO</span></div><h4>Fuego lento,<br /><em>sobremesa larga.</em></h4><div className="manso-form"><div><small>FECHA</small><span>Vie 19 · Sep</span></div><div><small>HORA</small><span>21:30</span></div><div><small>PERSONAS</small><span>4</span></div></div><button tabIndex={-1}>Reservar mesa</button></div></div></article>;
 }
