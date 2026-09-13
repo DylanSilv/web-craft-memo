@@ -31,6 +31,16 @@ const PROCESO: [string, string, string][] = [
    "Dominio, correo, medición y control de calidad. Reviso en escritorio y en teléfono antes de que quede en línea."],
 ];
 
+// BORRADOR editable: rubro + qué tiene que resolver su web.
+// Dylan: ajustá la segunda columna con lo que ves vos en cada rubro.
+const RUBROS: [string, string][] = [
+  ["Gastronomía", "Carta al día, reserva sin ida y vuelta, y cómo llegar."],
+  ["Fitness y bienestar", "Planes, horarios y qué pasa en la primera clase."],
+  ["Servicios y oficios", "Qué hacés exactamente, dónde, y cómo pedir presupuesto."],
+  ["Comercio", "Catálogo con precios y un camino claro a la compra."],
+  ["Estudios y consultorios", "Agenda, quién te atiende y por qué confiar."],
+];
+
 const slides = ["Portada", "El problema", "Qué hago", "Trabajo", "Cómo lo hago", "Qué incluye", "Por qué conmigo", "Para quién es", "Empecemos"];
 // TODO Dylan: completar antes de publicar. Sin esto, la slide 10 no cierra.
 const WHATSAPP = "598XXXXXXXX";
@@ -318,6 +328,12 @@ function Index() {
       <Slide id={3} className="service-slide">
         <SlideHead n={3} label="QUÉ HAGO" />
         <div className="service-statement" data-reveal><p>Una especialidad.</p><h2>Diseño y desarrollo<br />páginas web para<br /><em>negocios locales.</em></h2></div>
+        <div className="rubros" data-reveal data-stagger>
+          <p className="rubros-label">Tipos de negocio</p>
+          {RUBROS.map(([rubro, resuelve]) => (
+            <div className="rubro" key={rubro}><h3>{rubro}</h3><p>{resuelve}</p></div>
+          ))}
+        </div>
         <div className="service-bottom" data-reveal data-delay="1"><p>Cada web se organiza alrededor de una acción concreta.</p><div className="action-marquee">{["RESERVAR", "COMPRAR", "CONSULTAR", "VER MENÚ", "PEDIR PRESUPUESTO", "VISITAR"].map((word, index) => <span key={word}>{index > 0 && <i className="sep"> · </i>}{word}</span>)}</div></div>
       </Slide>
 
